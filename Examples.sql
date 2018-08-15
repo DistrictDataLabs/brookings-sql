@@ -43,7 +43,12 @@ DELETE FROM CUSTOMERS; /* DROP removes entire table, DELETE just removes the dat
 
 /* Using sample data */
 
-
+select * from CRS1
+  INNER JOIN Donors on CRS1.DONOR=Donors.DONOR
+  INNER JOIN Recipients on CRS1.RECIPIENT=Recipients.RECIPIENT
+  WHERE Donors.DDescription='United States' AND Recipients.RDescription='India'
+  ORDER BY YEAR;
+  
 
 select * from CRS1 
 	INNER JOIN Donors on CRS1.DONOR=Donors.DONOR
