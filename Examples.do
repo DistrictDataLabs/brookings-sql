@@ -30,3 +30,8 @@ odbc load Country="RDescription" Year="YEAR" Amount="Value" , exec("`query1'") c
 /* Execute a SQL command and see the results on screen */
 odbc exec("select Recipients.RDescription, CRS1.Value from CRS1 INNER JOIN Recipients on CRS1.RECIPIENT=Recipients.RECIPIENT WHERE Recipients.RDescription='India';"),connectionstring("DSN=SQLBrookings;Database=BRKRes01;") 
 
+/* Uploading your own data */
+sysuse auto.dta, clear
+local connstr "DSN=SQLBrookings;Database=BRKRes01;"
+odbc insert make price mpg rep78 displacement gear_ratio, table("Auto") connectionstring("`connstr'") create sql
+odbc describe Auto, connectionstring("`connstr'")
