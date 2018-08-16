@@ -1,9 +1,10 @@
+#Ensure odbc library is installed. If it is not, enter install.packages("odbc") in RStudio console. 
 library(odbc)
 
 odbcListDataSources()
 
 cnxn <- dbConnect(odbc(), server="brkressql01.database.windows.net",
-                  driver = "ODBC Driver 17 for SQL Server",
+                  driver = "SQL Server",
                   database="BRKRes01",
                   UID = "<your username>",
                   PWD = "<your password>")
