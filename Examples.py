@@ -25,7 +25,7 @@ cnxn = pyodbc.connect(conn_str.format(**config))
 cursor = cnxn.cursor()
 
 cursor.execute("select top 10 * from CRS1;")
-[column[0] for column in cursor.description]
+#[column[0] for column in cursor.description]
 pd.read_sql_query("select top 10 * from CRS1", cnxn)
 
 for entry in cursor:
@@ -33,15 +33,19 @@ for entry in cursor:
 
 donors = pd.read_sql('select * from Donors', cnxn)
 
-query = '''select CRS1.YEAR, CRS1.Value, Donors.DDescription as Donor,
-    Recipients.RDescription as Recipient from CRS1
-  INNER JOIN Donors on CRS1.DONOR=Donors.DONOR
-  INNER JOIN Recipients on CRS1.RECIPIENT=Recipients.RECIPIENT
-  WHERE Donors.DDescription='United States' AND Recipients.RDescription='India'
-  ORDER BY YEAR;'''
+query = '''SELECT
+	 YEAR, SUM(Value) AS Total 
+FROM CRS1 
+WHERE
+ CRS1.DONOR IN (SELECT DONOR FROM Donors WHERE DDescription='United States') AND
+ CRS1.RECIPIENT IN (SELECT RECIPIENT FROM Recipients WHERE RDescription='India') AND
+ CRS1.SECTOR IN (SELECT SECTOR from Sectors WHERE SDescription='Total All Sectors')
+GROUP BY YEAR ORDER BY YEAR;'''
 
 test = pd.read_sql(query, cnxn)
 test.head()
+
+
 # Find available tables
 for table_name in cursor.tables(tableType='TABLE'):
     print(table_name)

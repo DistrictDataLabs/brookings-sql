@@ -26,6 +26,24 @@ VALUES (5, 'Harry', 27, 'Boston', 85000.00 );
 INSERT INTO CUSTOMERS (ID,NAME,AGE,ADDRESS,SALARY) 
 VALUES (6, 'Krista', 22, 'Washington', 45000.00 );
 
+CREATE TABLE POC( 
+   ID   INT              NOT NULL, 
+   NAME VARCHAR (20)     NOT NULL, 
+   POC  VARCHAR (20)              NOT NULL, 
+   PRIMARY KEY (ID));
+
+INSERT INTO POC (ID, NAME, POC)
+VALUES (1, 'Harry','Gary');
+
+INSERT INTO POC (ID, NAME, POC)
+VALUES (2, 'Krista', 'Gary');
+
+INSERT INTO POC (ID, NAME, POC)
+VALUES(3, 'Ron','Florence');
+
+INSERT INTO POC (ID, NAME, POC)
+  VALUES(4, 'Zuri','Florence')
+
 /* DROP TABLE CUSTOMERS */
 
 SELECT * FROM CUSTOMERS;
@@ -57,15 +75,16 @@ select * from CRS1
 	WHERE Donors.DDescription='United States' AND Recipients.RDescription='India' AND Flows.FDescription LIKE 'Official%'
 	ORDER BY YEAR;
 	
-	
-select * from CRS1 
+CREATE VIEW AllUSIndia AS	
+select Donors.DDescription, Recipients.RDescription, CRS1.YEAR, CRS1.Value from CRS1 
 	INNER JOIN Donors on CRS1.DONOR=Donors.DONOR
 	INNER JOIN Recipients on CRS1.RECIPIENT=Recipients.RECIPIENT
 	INNER JOIN Flows on CRS1.FLOW=Flows.FLOW
 	INNER JOIN Sectors on CRS1.SECTOR=Sectors.SECTOR
 	WHERE Donors.DDescription='United States' AND Recipients.RDescription='India' AND Flows.FDescription LIKE 'Official%' AND
-	  Sectors.SDescription='Total All Sectors' 
-	ORDER BY YEAR;
+	  Sectors.SDescription='Total All Sectors';
+	  
+select YEAR, sum(Value) from AllUSIndia GROUP BY YEAR;
 	
 	select Donors.DDescription, Recipients.RDescription, Sectors.SDescription, CRS1.YEAR, CRS1.Value into TMPTBL  from CRS1 
 	INNER JOIN Donors on CRS1.DONOR=Donors.DONOR

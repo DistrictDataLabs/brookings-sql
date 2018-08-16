@@ -14,6 +14,7 @@ clear
 set more off
 odbc list
 odbc query, connectionstring("DSN=SQLBrookings;Database=BRKRes01;") u("<your username>") p("<your password>")
+
 ***********************************************************************************************************
 local connstr "DSN=SQLBrookings;Database=BRKRes01;" /* Using macros */
 odbc describe CRS1, connectionstring("`connstr'")
@@ -24,8 +25,9 @@ odbc load , table("Donors") connectionstring("`connstr'") clear
 
 /* Execute a more complicated query and load the resultant table in Stata */
 local connstr "DSN=SQLBrookings;Database=BRKRes01;"
-local query1 "select Recipients.RDescription, CRS1.YEAR, CRS1.Value from CRS1 INNER JOIN Recipients on CRS1.RECIPIENT=Recipients.RECIPIENT WHERE Recipients.RDescription='India'"
-odbc load Country="RDescription" Year="YEAR" Amount="Value" , exec("`query1'") clear connectionstring("`connstr'")
+local query1 "SELECT YEAR, SUM(Value) AS Total FROM CRS1 WHERE CRS1.DONOR IN (SELECT DONOR FROM Donors WHERE DDescription='United States') AND CRS1.RECIPIENT IN (SELECT RECIPIENT FROM Recipients WHERE RDescription='India') AND CRS1.SECTOR IN (SELECT SECTOR from Sectors WHERE SDescription='Total All Sectors') GROUP BY YEAR ORDER BY YEAR;"
+odbc load , exec("`query1'") clear connectionstring("`connstr'")
+list
 
 /* Execute a SQL command and see the results on screen */
 odbc exec("select Recipients.RDescription, CRS1.Value from CRS1 INNER JOIN Recipients on CRS1.RECIPIENT=Recipients.RECIPIENT WHERE Recipients.RDescription='India';"),connectionstring("DSN=SQLBrookings;Database=BRKRes01;") 
