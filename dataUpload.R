@@ -40,7 +40,7 @@ AidType <- CRS %>%
 
 library(odbc)
 cnxn <- dbConnect(odbc(), server="brkressql01.database.windows.net",
-                  driver = "ODBC Driver 17 for SQL Server",
+                  driver = "SQL Server",
                   database="BRKRes01",
                   UID = "<your username>",
                   PWD = "<your password>")
