@@ -2,7 +2,7 @@ import pyodbc
 import pandas as pd
 
 config = dict(
-    driver = '{ODBC Driver 17 for SQL Server}',
+    driver = '{SQL Server}',
     server = 'tcp:brkressql01.database.windows.net',
     database = 'BRKRes01',
     username = '<your username>' ,
